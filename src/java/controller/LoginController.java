@@ -46,13 +46,7 @@ public class LoginController extends HttpServlet {
             if (user != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("userLoggedIn", user);
-                if (user.getRoleID().equalsIgnoreCase("ADM")) {
-                    url = "foodList.jsp";
-                    //admin page
-                } else {
-                    url = "foodList.jsp";
-                    //user page
-                }
+                
             } else{
                 request.setAttribute("ERROR", "User does not exist");
             }
@@ -60,8 +54,7 @@ public class LoginController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
-        
+            response.sendRedirect("MainController?action=ViewFoods");
         }
     }
 

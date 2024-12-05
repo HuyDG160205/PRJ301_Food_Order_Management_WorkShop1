@@ -156,4 +156,35 @@ public class FoodDAO {
         }
     }
 
+    public List<FoodItem> getFoodByName(String search) throws Exception {
+        List<FoodItem> foodList = new ArrayList<>();
+        ResultSet rs = null;
+        try (PreparedStatement ptm = DatabaseConnection.getConnection().prepareStatement("select * from tblFoodItems where foodname like ?")) {
+            ptm.setString(1, "%" + search + "%");
+            rs = ptm.executeQuery();
+            while (rs.next()) {
+                String foodid = rs.getString(1);
+                String foodname = rs.getString(2);
+                double price = rs.getDouble(3);
+                int quantiy = rs.getInt(4);
+                String category = rs.getString(5);
+
+                foodList.add(new FoodItem(foodid, foodname, price, quantiy, category));
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (rs != null ){
+                rs.close();
+            }
+        }
+        
+        if(foodList.isEmpty()){
+            return null;
+        }
+        
+        return foodList;
+
+    }
+
 }

@@ -55,10 +55,12 @@ public class MainController extends HttpServlet {
                 case "UpdateCart":
                     url = "CartController";
                     break;
-                case "PlaceOrder": case"Checkout":
+                case "PlaceOrder":
+                case "Checkout":
+                case "OrderList":
                     url = "OrderController";
                     break;
-                case"LogOut":
+                case "Logout":
                     url = "LogoutController";
                     break;
                 default:

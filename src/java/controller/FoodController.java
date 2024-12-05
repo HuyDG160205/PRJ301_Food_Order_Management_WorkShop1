@@ -20,15 +20,14 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Gia Huy
  */
-
 @WebServlet("/FoodController")
 public class FoodController extends HttpServlet {
-
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
         FoodDAO foodDAO = new FoodDAO();
-
+        
         try {
             if ("ViewFoods".equals(action)) {
                 List<FoodItem> foodItems = foodDAO.getAllFoodItems();
@@ -47,12 +46,12 @@ public class FoodController extends HttpServlet {
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
     }
-
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
         FoodDAO foodDAO = new FoodDAO();
-
+        
         try {
             if ("CreateFood".equals(action)) {
                 String foodId = request.getParameter("foodID");
@@ -60,7 +59,7 @@ public class FoodController extends HttpServlet {
                 double price = Double.parseDouble(request.getParameter("price"));
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
                 String category = request.getParameter("category");
-
+                
                 FoodItem food = new FoodItem(foodId, foodName, price, quantity, category);
                 foodDAO.addFood(food);
                 response.sendRedirect("MainController?action=ViewFoods");
@@ -70,7 +69,7 @@ public class FoodController extends HttpServlet {
                 double price = Double.parseDouble(request.getParameter("price"));
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
                 String category = request.getParameter("category");
-
+                
                 FoodItem food = new FoodItem(foodID, foodName, price, quantity, category);
                 foodDAO.updateFood(food);
                 response.sendRedirect("MainController?action=ViewFoods");
@@ -78,6 +77,14 @@ public class FoodController extends HttpServlet {
                 String foodID = request.getParameter("foodID");
                 foodDAO.deleteFood(foodID);
                 response.sendRedirect("MainController?action=ViewFoods");
+            } else if ("ViewFoods".equals(action)) {
+                String search = request.getParameter("searchFood");
+                List<FoodItem> foodItems = foodDAO.getFoodByName(search);
+                
+                request.setAttribute("foodItems", foodItems);
+                request.setAttribute("searchValue", search);
+                request.getRequestDispatcher("foodList.jsp").forward(request, response);
+                
             }
         } catch (Exception e) {
             e.printStackTrace();

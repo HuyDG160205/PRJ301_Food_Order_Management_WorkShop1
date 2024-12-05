@@ -69,11 +69,18 @@
                 response.sendRedirect("login.html");
                 return; // Stop further execution
             }
+            
+            String search = (String) request.getAttribute("searchValue");
+            if(search == null){
+                search = "";
+            } 
+
         %>
 
         <div class="container">
             <!-- Button to View Foods -->
-            <form action="MainController" method="GET">
+            <form action="MainController" method="POST">
+                <input type="text" name="searchFood"  placeholder="Search" value="<%=search%>" />
                 <input class="button" type="submit" name="action" value="ViewFoods"/>
             </form>
 
@@ -91,20 +98,20 @@
                     if (foodList != null) {
                         for (FoodItem food : foodList) {
                 %>
-                    <tr>
-                        <form action="MainController" method="post">
-                            <input type="hidden" name="foodID" value="<%=food.getFoodID()%>"/>
-                            <td><%= food.getFoodName() %></td>
-                            <td><%= food.getPrice() %></td>
-                            <td>
-                                <input type="text" name="quantity"/>
-                            </td>
-                            <td><%= food.getCategory() %></td>
-                            <td>
-                                <input class="button" type="submit" name="action" value="AddToCart"/>
-                            </td>
-                        </form>
-                    </tr>
+                <tr>
+                <form action="MainController" method="post">
+                    <input type="hidden" name="foodID" value="<%=food.getFoodID()%>"/>
+                    <td><%= food.getFoodName()%></td>
+                    <td><%= food.getPrice()%></td>
+                    <td>
+                        <input type="text" name="quantity"/>
+                    </td>
+                    <td><%= food.getCategory()%></td>
+                    <td>
+                        <input class="button" type="submit" name="action" value="AddToCart"/>
+                    </td>
+                </form>
+                </tr>
                 <%
                         }
                     }
@@ -115,12 +122,18 @@
             <%
                 if ("adm".equalsIgnoreCase(user.getRoleID())) {
             %>
-                <div class="admin-link">
-                    <a href="manageFood.jsp">Manage Food</a>
-                </div>
+            <div class="admin-link">
+                <a href="manageFood.jsp">Manage Food</a>
+            </div>
+            <div class="admin-link">
+                <a href="MainController?action=OrderList">See order List</a>
+            </div>
             <%
                 }
             %>
+            <div>
+                <a href="MainController?action=Logout">Log out</a>
+            </div>
         </div>
     </body>
 </html>

@@ -8,6 +8,7 @@ package controller;
 import dao.CartDAO;
 import dao.OrderDAO;
 import dto.CartItem;
+import dto.Order;
 import dto.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,6 +27,25 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet("/OrderController")
 public class OrderController extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            
+            OrderDAO dao = new OrderDAO();
+            List<Order> orderList = dao.getListOrder();
+            req.setAttribute("orderList", orderList);
+            
+            req.getRequestDispatcher("OrderList.jsp").forward(req, resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            req.setAttribute("ERROR", "Failed to get orderList");
+            req.getRequestDispatcher("error.jsp").forward(req, resp);
+        }
+    }
+    
+    
+    
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -6,8 +6,12 @@
 package dao;
 
 import dto.CartItem;
+import dto.Order;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.http.HttpSession;
@@ -66,6 +70,32 @@ public class OrderDAO {
                 conn.close();
             }
         }
-
+    }
+    
+    public List<Order> getListOrder() throws Exception {
+        List<Order> orderList = new ArrayList<>();
+        ResultSet rs = null;
+        
+        final String sql = "select * from tblOrders";
+        
+        try (PreparedStatement ptm = DatabaseConnection.getConnection().prepareStatement(sql)) {
+            rs = ptm.executeQuery();
+            while(rs.next()){
+                String orderID = rs.getString(1);
+                String userID = rs.getString(2);
+                Date orderDat = rs.getDate(3);
+                double totalAmount = rs.getDouble(4);
+                orderList.add(new Order(orderID, userID, orderDat, totalAmount));
+            }
+            
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if(rs != null){
+                rs.close();
+            }
+        }
+        
+        return orderList;
     }
 }

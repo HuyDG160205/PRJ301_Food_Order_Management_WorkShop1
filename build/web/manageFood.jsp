@@ -127,6 +127,9 @@
                     }
                 %>
             </table>
+            <div class="checkout-btn">
+                <a href="MainController?action=ViewFoods">Continue Shopping</a>
+            </div>
         </div>
 
     </body>
