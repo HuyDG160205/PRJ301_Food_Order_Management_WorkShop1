@@ -90,6 +90,11 @@
                     <label for="password">Password:</label>
                     <input type="password" name="password" required /><br />
                 </div>
+                
+                <div>
+                    Is Admin
+                    <input type="checkbox" name="chkIsAdmin" />
+                </div>
 
                 <input type="submit" name="action" value="Register" />
             </form>

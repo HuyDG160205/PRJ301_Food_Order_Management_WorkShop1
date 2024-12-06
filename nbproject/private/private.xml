@@ -10,6 +10,7 @@
             <file>file:/D:/FA24/CSD201/FoodOrderManagement/src/java/controller/RegisterController.java</file>
             <file>file:/D:/FA24/CSD201/FoodOrderManagement/src/java/dao/CartDAO.java</file>
             <file>file:/D:/FA24/CSD201/FoodOrderManagement/src/java/dto/CartItem.java</file>
+            <file>file:/D:/FA24/CSD201/FoodOrderManagement/src/java/dto/OrderDetail.java</file>
             <file>file:/D:/FA24/CSD201/FoodOrderManagement/src/java/controller/OrderController.java</file>
             <file>file:/D:/FA24/CSD201/FoodOrderManagement/src/java/dto/FoodItem.java</file>
             <file>file:/D:/FA24/CSD201/FoodOrderManagement/web/WEB-INF/web.xml</file>

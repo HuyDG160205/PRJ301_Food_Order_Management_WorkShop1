@@ -40,12 +40,17 @@ public class RegisterController extends HttpServlet {
         String email = request.getParameter("email");
         String phoneNumner = request.getParameter("phoneNumber");
         String password = request.getParameter("password");
+        String role = request.getParameter("chkIsAdmin");
         String url = "Register.jsp";
+        String isAdmin = "ADM";
+        if(role == null){
+            isAdmin = "USR";
+        }
         try {
             boolean checkValidation = true;
             
             if (checkValidation) {
-                User user = new User(userID, fullName, email, phoneNumner, "USR", password);
+                User user = new User(userID, fullName, email, phoneNumner, isAdmin, password);
                 boolean checkInsert = dao.addUser(user);
                 if (checkInsert) {
                     url = "login.html";

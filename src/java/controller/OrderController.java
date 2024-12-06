@@ -9,6 +9,7 @@ import dao.CartDAO;
 import dao.OrderDAO;
 import dto.CartItem;
 import dto.Order;
+import dto.OrderDetail;
 import dto.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,18 +25,17 @@ import javax.servlet.http.HttpSession;
  *
  * @author Gia Huy
  */
-
 @WebServlet("/OrderController")
 public class OrderController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            
+
             OrderDAO dao = new OrderDAO();
             List<Order> orderList = dao.getListOrder();
-            req.setAttribute("orderList", orderList);
-            
+            req.getSession().setAttribute("orderList", orderList);
+
             req.getRequestDispatcher("OrderList.jsp").forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,9 +43,6 @@ public class OrderController extends HttpServlet {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
     }
-    
-    
-    
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -53,7 +50,6 @@ public class OrderController extends HttpServlet {
         HttpSession session = request.getSession();
         OrderDAO orderDAO = new OrderDAO();
         CartDAO cartDAO = new CartDAO();
-        
 
         try {
             if ("Checkout".equals(action)) {
@@ -66,6 +62,12 @@ public class OrderController extends HttpServlet {
                 orderDAO.placeOrder(userID, totalAmount, session);
                 session.removeAttribute("cartItems");  // Clear the cart after placing order
                 response.sendRedirect("orderConfirmation.jsp");
+            } else if ("ViewDetails".equals(action)) {
+                String orderID = request.getParameter("orderID");
+                List<OrderDetail> detailList = orderDAO.getOrderDetail(orderID);
+                request.setAttribute("detailList", detailList);
+                
+                request.getRequestDispatcher("OrderList.jsp").forward(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,4 +76,3 @@ public class OrderController extends HttpServlet {
         }
     }
 }
-

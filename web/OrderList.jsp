@@ -3,6 +3,7 @@
     Created on : Dec 5, 2024, 2:56:21 PM
     Author     : Gia Huy
 --%>
+<%@page import="dto.OrderDetail"%>
 <%@page import="dto.User"%>
 <%@page import="dto.Order"%>
 <%@page import="java.util.List"%>
@@ -81,10 +82,11 @@
                 <th>User Id</th>
                 <th>Order Date</th>
                 <th>Total Amount</th>
+                <th>Action</th>
             </tr>   
 
             <%
-                List<Order> orderList = (List<Order>) request.getAttribute("orderList");
+                List<Order> orderList = (List<Order>) request.getSession().getAttribute("orderList");
                 if (orderList != null && !orderList.isEmpty()) {
                     for (Order order : orderList) {
             %>
@@ -93,18 +95,56 @@
                 <td><%=order.getUserID()%></td>
                 <td><%=order.getOrderDate()%></td>
                 <td><%=order.getTotalAmount()%></td>
+                <td>
+                    <form action="MainController" method="post">
+                        <input type="hidden" name="orderID" value="<%=order.getOrderID()%>"/>
+                        <input type="hidden" name="action" value="ViewDetails"/>
+                        <input type="submit" name="View Detail" value="View Details"/>
+                    </form>
+                </td>
             </tr>
-            <%  
-                    }
-                } else {
+            <%
+                }
+            } else {
             %>
             <tr>
                 <td colspan="4" class="no-orders">No orders found.</td>
             </tr>
-            <% 
+            <%
                 }
             %>
         </table>
+
+        <br/>
+        <h2>Order Details</h2>
+        <%
+            List<OrderDetail> orderDetail = (List<OrderDetail>) request.getAttribute("detailList");
+
+            if (orderDetail != null) {
+        %>
+        <table>
+            <tr>
+                <th>FoodID</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+            <%
+                for (OrderDetail detail : orderDetail) {
+            %>
+            <tr>
+                <td><%=detail.getFoodID()%></td>
+                <td><%=detail.getQuantity()%></td>
+                <td><%=detail.getPrice()%></td>
+            </tr>
+            <%
+                }
+            %>
+        </table>
+
+        <%            }
+        %>
+
+
 
         <div class="checkout-btn">
             <a href="MainController?action=ViewFoods">Continue Shopping</a>

@@ -7,6 +7,7 @@ package dao;
 
 import dto.CartItem;
 import dto.Order;
+import dto.OrderDetail;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -71,31 +72,63 @@ public class OrderDAO {
             }
         }
     }
-    
+
     public List<Order> getListOrder() throws Exception {
         List<Order> orderList = new ArrayList<>();
         ResultSet rs = null;
-        
+
         final String sql = "select * from tblOrders";
-        
+
         try (PreparedStatement ptm = DatabaseConnection.getConnection().prepareStatement(sql)) {
             rs = ptm.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 String orderID = rs.getString(1);
                 String userID = rs.getString(2);
                 Date orderDat = rs.getDate(3);
                 double totalAmount = rs.getDouble(4);
                 orderList.add(new Order(orderID, userID, orderDat, totalAmount));
             }
-            
+
         } catch (Exception e) {
             throw e;
         } finally {
-            if(rs != null){
+            if (rs != null) {
                 rs.close();
             }
         }
-        
+
         return orderList;
+    }
+
+    public List<OrderDetail> getOrderDetail(String orderID) throws Exception {
+        List<OrderDetail> detailList = new ArrayList<>();
+
+        ResultSet rs = null;
+        try (PreparedStatement ptm = DatabaseConnection.getConnection().prepareStatement("select * from tblorderDetails where orderid like ?")) {
+            ptm.setString(1, "%" + orderID + "%");
+            rs = ptm.executeQuery();
+            while (rs.next()) {
+                String id = rs.getString(1);
+                String orderId = rs.getString(2);
+                String foodid = rs.getString(3);
+                int quantity = rs.getInt(4);
+                double price = rs.getDouble(5);
+                
+                detailList.add(new OrderDetail(id, orderId, foodid, quantity, price));
+            }//end while 
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+        }
+
+        if (detailList.isEmpty()) {
+            return null;
+        }
+
+        return detailList;
+
     }
 }

@@ -58,6 +58,7 @@ public class MainController extends HttpServlet {
                 case "PlaceOrder":
                 case "Checkout":
                 case "OrderList":
+                case "ViewDetails":
                     url = "OrderController";
                     break;
                 case "Logout":
